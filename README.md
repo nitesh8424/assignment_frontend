@@ -30,3 +30,5 @@ User Rights ->
 
 # SEE THE ATTACHMENT OF SCREENSHOTS In the REPO.
     Folder location /src/screenshots
+    the screenshots are not final. it is just demo purpose to view UI of task. 
+    I update manage permission for only who's group admin only.
