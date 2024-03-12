@@ -20,20 +20,34 @@ function Admin() {
 
 
     function handleLogout() {
-        if (location.state) {
-            location.state.username = null;
-            username = null;
-        }
+        localStorage.removeItem('token');
         window.location.replace('/admin/login');
     }
 
     useEffect(() => {
-        if (!username) {
-            handleLogout();
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/admin/login');
         } else {
-            fetchUsers();
+            fetch('http://localhost:4000/api/validate-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Invalid token');
+                }
+                fetchUsers();
+            })
+            .catch(error => {
+                console.error('Error validating token:', error);
+                navigate('/admin/login'); 
+            });
         }
-    }, [username]);
+    }, []);    
 
     const fetchUsers = async () => {
         try {

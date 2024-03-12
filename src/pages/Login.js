@@ -4,16 +4,19 @@ import { useNavigate } from "react-router-dom";
 const Login = ({ isLogin }) => {
   const [loginData, setLoginData] = useState({
     username: "",
-    password: ""
+    password: "",
+    role: "",
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   function handleOnChange(e) {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? (checked ? 'admin' : '') : value;
+    console.log('newVa', newValue)
     setLoginData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: newValue,
     }));
   }
 
@@ -23,9 +26,6 @@ const Login = ({ isLogin }) => {
       if (loginData.username == "" || loginData.password == "") {
         alert('please fill username and password')
         return
-      }
-      if (window.location.pathname === '/admin/login') {
-        loginData.role = 'admin';
       }
       // console.log('loginData',loginData)
       const response = await fetch(`http://localhost:4000/api/login`, {
@@ -39,10 +39,11 @@ const Login = ({ isLogin }) => {
       const data = await response.json();
       // console.log('data',data)
       if (data.success) {
+        localStorage.setItem('token', data.token);
         if (data.data.role == 'admin') {
           // console.log('admin',data.data)
           navigate('/admin', { state: { username: loginData.username } })
-        }else{
+        } else {
           navigate('/user', { state: { username: loginData.username } })
         }
       } else {
@@ -81,6 +82,18 @@ const Login = ({ isLogin }) => {
                     name="password"
                     onChange={(e) => handleOnChange(e)}
                   />
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td style={{ display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type="checkbox"
+                    name="role"
+                    onChange={(e) => handleOnChange(e)}
+                    style={{ marginRight: '5px' }}
+                  />
+                  <label htmlFor="isAdmin">Login as Admin</label>
                 </td>
               </tr>
             </tbody>

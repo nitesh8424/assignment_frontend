@@ -22,20 +22,35 @@ function User({ socket }) {
   const [groupAdmin, setGroupAdmin] = useState('');
 
   function handleLogout() {
-    if (location.state) {
-      location.state.username = null;
-      username = null;
-    }
+    localStorage.removeItem('token');
     window.location.replace('/');
-  }
+}
 
-  useEffect(() => {
-    if (!username) {
-      handleLogout();
+useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        navigate('/');
     } else {
-      fetchMessages();
+        // Send token to server for validation
+        fetch('http://localhost:4000/api/validate-token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Invalid token');
+            }
+            fetchMessages();
+        })
+        .catch(error => {
+            console.error('Error validating token:', error);
+            navigate('/'); 
+        });
     }
-  }, [username]);
+}, []); 
 
   const fetchMessages = async () => {
     try {
