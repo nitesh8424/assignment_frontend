@@ -21,13 +21,13 @@ function Admin() {
 
     function handleLogout() {
         localStorage.removeItem('token');
-        window.location.replace('/admin/login');
+        window.location.replace('/');
     }
 
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (!token) {
-            navigate('/admin/login');
+            navigate('/');
         } else {
             fetch('http://localhost:4000/api/validate-token', {
                 method: 'POST',
@@ -44,7 +44,7 @@ function Admin() {
             })
             .catch(error => {
                 console.error('Error validating token:', error);
-                navigate('/admin/login'); 
+                navigate('/'); 
             });
         }
     }, []);    

@@ -17,7 +17,6 @@ function App() {
         <Route path="admin" element={<Admin />} />
         <Route path="user" element={<User socket={socket} />} />
         <Route path="/" element={<Login />} />
-        <Route path="/admin/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

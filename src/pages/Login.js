@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+const CryptoJS = require("crypto-js");
 
 const Login = ({ isLogin }) => {
   const [loginData, setLoginData] = useState({
@@ -13,7 +14,7 @@ const Login = ({ isLogin }) => {
   function handleOnChange(e) {
     const { name, value, type, checked } = e.target;
     const newValue = type === 'checkbox' ? (checked ? 'admin' : '') : value;
-    console.log('newVa', newValue)
+    // console.log('newVa', newValue)
     setLoginData((prevFormData) => ({
       ...prevFormData,
       [name]: newValue,
@@ -28,12 +29,14 @@ const Login = ({ isLogin }) => {
         return
       }
       // console.log('loginData',loginData)
+      const encryptedPassword = CryptoJS.AES.encrypt(loginData?.password, "@cky").toString();
+      
       const response = await fetch(`http://localhost:4000/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify({...loginData, password:encryptedPassword}),
       });
 
       const data = await response.json();
@@ -58,7 +61,7 @@ const Login = ({ isLogin }) => {
     <div style={{ position: 'fixed', width: '100%', height: '100%', background: 'rgba(0, 0, 0, 0.4)', zIndex: '2', margin: 'auto', display: 'flex' }}>
       <div style={{ width: '500px', borderRadius: '10px', backgroundColor: 'white', padding: '10px', position: 'relative', height: '450px', margin: 'auto', border: '1px solid box', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)' }}>
         <div style={{ textAlign: 'center' }}>
-          {window.location.pathname === '/admin/login' && <h2> ADMIN </h2>}<h2> LOGIN </h2> </div>
+           <h2> ASSIGNMENT </h2> <h2> LOGIN </h2> </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           <table style={{ width: '90%', margin: '30px 0', borderCollapse: 'collapse' }}>
             <tbody>

@@ -7,7 +7,8 @@ npm install  or npm install --force
 to run project on localhost:3000
 
 # for admin login page url is
-http://localhost:3000/admin/login
+http://localhost:3000/
+check box checked for admin user
 you can create admin login credentials by using admin create api.
 
 Admin Rights ->

@@ -90,7 +90,7 @@ useEffect(() => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ groupName: group, username: groupAdmin }),
+        body: JSON.stringify({ groupName: group, username: groupAdmin||username }),
       });
       alert(`${group} group is successfully deleted.`)
       fetchMessages();
